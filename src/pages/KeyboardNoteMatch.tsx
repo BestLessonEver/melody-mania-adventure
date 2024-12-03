@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
-const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const pianoKeys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const sharpNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const flatNotes = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"];
 
 const KeyboardNoteMatch = () => {
   const [score, setScore] = useState(0);
@@ -11,14 +11,20 @@ const KeyboardNoteMatch = () => {
   const [draggedNote, setDraggedNote] = useState<string | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [useFlats, setUseFlats] = useState(false);
+
+  const notes = useFlats ? flatNotes : sharpNotes;
+  const pianoKeys = useFlats ? flatNotes : sharpNotes;
 
   useEffect(() => {
     generateNewNote();
   }, []);
 
   const generateNewNote = () => {
-    const randomNote = notes[Math.floor(Math.random() * notes.length)];
+    const currentNotes = useFlats ? flatNotes : sharpNotes;
+    const randomNote = currentNotes[Math.floor(Math.random() * currentNotes.length)];
     setCurrentNote(randomNote);
+    setUseFlats(prev => !prev); // Toggle between flats and sharps for next turn
   };
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, note: string) => {
@@ -106,7 +112,6 @@ const KeyboardNoteMatch = () => {
           </div>
         </div>
 
-        {/* Draggable Notes - Updated Layout */}
         <div className="flex justify-center flex-wrap gap-2 px-4">
           {notes.map((note) => (
             <motion.div
@@ -122,10 +127,9 @@ const KeyboardNoteMatch = () => {
           ))}
         </div>
 
-        {/* Piano Keys */}
         <div className="flex justify-center gap-1">
           {pianoKeys.map((key) => {
-            const isBlackKey = key.includes("#");
+            const isBlackKey = key.includes("#") || key.includes("♭");
             return (
               <motion.div
                 key={key}
@@ -140,12 +144,12 @@ const KeyboardNoteMatch = () => {
                       : "bg-black/50"
                     : ""
                 }`}
-                onDragOver={(e: React.DragEvent<HTMLDivElement>) => handleDragOver(e, key)}
+                onDragOver={(e) => handleDragOver(e, key)}
                 onDragLeave={handleDragLeave}
-                onDrop={(e: React.DragEvent<HTMLDivElement>) => handleDrop(e, key)}
+                onDrop={(e) => handleDrop(e, key)}
                 whileHover={{ y: -5 }}
               >
-                <span className={key.includes("#") ? "text-white" : "text-black"}>
+                <span className={key.includes("#") || key.includes("♭") ? "text-white" : "text-black"}>
                   {key}
                 </span>
               </motion.div>
