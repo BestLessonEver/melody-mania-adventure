@@ -42,10 +42,10 @@ const KeyboardNoteMatch = () => {
     
     if (droppedNote === key) {
       setScore((prev) => prev + 1);
-      toast.success("Correct! Great job!");
+      toast.success("Correct! Great job!", { duration: 500 });
       generateNewNote();
     } else {
-      toast.error("Try again!");
+      toast.error("Try again!", { duration: 500 });
     }
     setDraggedNote(null);
   };
