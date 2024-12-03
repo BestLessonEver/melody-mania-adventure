@@ -36,6 +36,6 @@
   .game-card {
     @apply bg-retro-purple/50 rounded-lg pixel-border
            p-6 hover:scale-105 transition-transform duration-200
-           cursor-pointer animate-float;
+           cursor-pointer;
   }
 }
