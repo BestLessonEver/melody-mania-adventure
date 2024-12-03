@@ -132,7 +132,7 @@ const KeyboardNoteMatch = () => {
                   ? "bg-retro-purple h-32 w-12"
                   : "bg-white h-40 w-16"
               } flex items-end justify-center pb-4 cursor-pointer transition-colors duration-200 ${
-                hoveredKey === key ? "bg-retro-green/50" : ""
+                hoveredKey === key ? "bg-retro-yellow/50" : ""
               }`}
               onDragOver={(e) => handleDragOver(e, key)}
               onDragLeave={handleDragLeave}
