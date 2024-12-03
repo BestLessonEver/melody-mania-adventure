@@ -10,6 +10,7 @@ const KeyboardNoteMatch = () => {
   const [currentNote, setCurrentNote] = useState("");
   const [draggedNote, setDraggedNote] = useState<string | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
   useEffect(() => {
     generateNewNote();
@@ -20,18 +21,24 @@ const KeyboardNoteMatch = () => {
     setCurrentNote(randomNote);
   };
 
-  const handleDragStart = (e: React.DragEvent, note: string) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, note: string) => {
     e.dataTransfer.setData("text/plain", note);
     setDraggedNote(note);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, key: string) => {
     e.preventDefault();
+    setHoveredKey(key);
   };
 
-  const handleDrop = (e: React.DragEvent, key: string) => {
+  const handleDragLeave = () => {
+    setHoveredKey(null);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, key: string) => {
     e.preventDefault();
     const droppedNote = e.dataTransfer.getData("text/plain");
+    setHoveredKey(null);
     
     if (droppedNote === key) {
       setScore((prev) => prev + 1);
@@ -124,8 +131,11 @@ const KeyboardNoteMatch = () => {
                 key.includes("#")
                   ? "bg-retro-purple h-32 w-12"
                   : "bg-white h-40 w-16"
-              } flex items-end justify-center pb-4 cursor-pointer`}
-              onDragOver={handleDragOver}
+              } flex items-end justify-center pb-4 cursor-pointer transition-colors duration-200 ${
+                hoveredKey === key ? "bg-retro-green/50" : ""
+              }`}
+              onDragOver={(e) => handleDragOver(e, key)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, key)}
               whileHover={{ y: -5 }}
             >
