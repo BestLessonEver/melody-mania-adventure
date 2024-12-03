@@ -9,6 +9,7 @@ const KeyboardNoteMatch = () => {
   const [score, setScore] = useState(0);
   const [currentNote, setCurrentNote] = useState("");
   const [draggedNote, setDraggedNote] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(true);
 
   useEffect(() => {
     generateNewNote();
@@ -34,8 +35,42 @@ const KeyboardNoteMatch = () => {
     setDraggedNote(null);
   };
 
+  const closeInstructions = () => {
+    setShowInstructions(false);
+  };
+
   return (
     <div className="min-h-screen p-8">
+      {showInstructions && (
+        <motion.div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="bg-retro-purple pixel-border p-8 rounded-lg max-w-md text-center"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <h2 className="text-2xl text-retro-green mb-4">How to Play: Keyboard Note Match</h2>
+            <div className="text-left space-y-4 mb-6">
+              <p>🎵 A random musical note will appear on the screen.</p>
+              <p>🖱️ Drag the corresponding note from the top row.</p>
+              <p>🎹 Drop it onto the correct piano key below.</p>
+              <p>✨ Earn points for each correct match!</p>
+            </div>
+            <button 
+              className="pixel-button w-full"
+              onClick={closeInstructions}
+            >
+              Got It, Let's Play!
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
