@@ -106,14 +106,14 @@ const KeyboardNoteMatch = () => {
           </div>
         </div>
 
-        {/* Draggable Notes */}
-        <div className="flex justify-center gap-4 mb-8">
+        {/* Draggable Notes - Updated Layout */}
+        <div className="flex justify-center flex-wrap gap-2 px-4">
           {notes.map((note) => (
             <motion.div
               key={note}
               draggable="true"
               onDragStart={(e) => handleDragStart(e, note)}
-              className="pixel-border bg-retro-blue p-4 cursor-grab active:cursor-grabbing"
+              className="pixel-border bg-retro-blue p-3 cursor-grab active:cursor-grabbing min-w-[48px] text-center"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -140,9 +140,9 @@ const KeyboardNoteMatch = () => {
                       : "bg-black/50"
                     : ""
                 }`}
-                onDragOver={(e) => handleDragOver(e, key)}
+                onDragOver={(e: React.DragEvent<HTMLDivElement>) => handleDragOver(e, key)}
                 onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, key)}
+                onDrop={(e: React.DragEvent<HTMLDivElement>) => handleDrop(e, key)}
                 whileHover={{ y: -5 }}
               >
                 <span className={key.includes("#") ? "text-white" : "text-black"}>
