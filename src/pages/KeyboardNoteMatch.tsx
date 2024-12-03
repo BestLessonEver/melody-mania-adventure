@@ -124,26 +124,33 @@ const KeyboardNoteMatch = () => {
 
         {/* Piano Keys */}
         <div className="flex justify-center gap-1">
-          {pianoKeys.map((key) => (
-            <motion.div
-              key={key}
-              className={`pixel-border ${
-                key.includes("#")
-                  ? "bg-retro-purple h-32 w-12"
-                  : "bg-white h-40 w-16"
-              } flex items-end justify-center pb-4 cursor-pointer transition-colors duration-200 ${
-                hoveredKey === key ? "bg-retro-yellow/50" : ""
-              }`}
-              onDragOver={(e) => handleDragOver(e, key)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, key)}
-              whileHover={{ y: -5 }}
-            >
-              <span className={key.includes("#") ? "text-white" : "text-black"}>
-                {key}
-              </span>
-            </motion.div>
-          ))}
+          {pianoKeys.map((key) => {
+            const isBlackKey = key.includes("#");
+            return (
+              <motion.div
+                key={key}
+                className={`pixel-border ${
+                  isBlackKey
+                    ? "bg-retro-purple h-32 w-12"
+                    : "bg-white h-40 w-16"
+                } flex items-end justify-center pb-4 cursor-pointer transition-colors duration-200 ${
+                  hoveredKey === key 
+                    ? isBlackKey 
+                      ? "bg-white/50" 
+                      : "bg-black/50"
+                    : ""
+                }`}
+                onDragOver={(e) => handleDragOver(e, key)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, key)}
+                whileHover={{ y: -5 }}
+              >
+                <span className={key.includes("#") ? "text-white" : "text-black"}>
+                  {key}
+                </span>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
     </div>
