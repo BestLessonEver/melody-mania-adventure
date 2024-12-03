@@ -149,7 +149,7 @@ const KeyboardNoteMatch = () => {
                 onDrop={(e) => handleDrop(e, key)}
                 whileHover={{ y: -5 }}
               >
-                <span className={key.includes("#") || key.includes("♭") ? "text-white" : "text-black"}>
+                <span className={isBlackKey ? "text-white" : "text-black"}>
                   {key}
                 </span>
               </motion.div>
