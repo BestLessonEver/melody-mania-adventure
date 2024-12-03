@@ -20,12 +20,20 @@ const KeyboardNoteMatch = () => {
     setCurrentNote(randomNote);
   };
 
-  const handleDragStart = (note: string) => {
+  const handleDragStart = (e: React.DragEvent, note: string) => {
+    e.dataTransfer.setData("text/plain", note);
     setDraggedNote(note);
   };
 
-  const handleDrop = (key: string) => {
-    if (draggedNote === key) {
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, key: string) => {
+    e.preventDefault();
+    const droppedNote = e.dataTransfer.getData("text/plain");
+    
+    if (droppedNote === key) {
       setScore((prev) => prev + 1);
       toast.success("Correct! Great job!");
       generateNewNote();
@@ -96,8 +104,8 @@ const KeyboardNoteMatch = () => {
           {notes.map((note) => (
             <motion.div
               key={note}
-              draggable
-              onDragStart={() => handleDragStart(note)}
+              draggable="true"
+              onDragStart={(e) => handleDragStart(e, note)}
               className="pixel-border bg-retro-blue p-4 cursor-grab active:cursor-grabbing"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -117,8 +125,8 @@ const KeyboardNoteMatch = () => {
                   ? "bg-retro-purple h-32 w-12"
                   : "bg-white h-40 w-16"
               } flex items-end justify-center pb-4 cursor-pointer`}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => handleDrop(key)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, key)}
               whileHover={{ y: -5 }}
             >
               <span className={key.includes("#") ? "text-white" : "text-black"}>
