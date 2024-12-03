@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const games = [
     {
@@ -10,6 +12,7 @@ const Index = () => {
       title: "Keyboard Note Match",
       description: "Match notes to piano keys in this exciting game!",
       status: "available",
+      path: "/keyboard-match"
     },
     {
       id: "note-quiz",
@@ -30,6 +33,14 @@ const Index = () => {
       status: "locked",
     })),
   ];
+
+  const handleGameSelect = (game: any) => {
+    if (game.status === "locked") return;
+    setSelectedGame(game.id);
+    if (game.path) {
+      navigate(game.path);
+    }
+  };
 
   return (
     <div className="min-h-screen p-8">
@@ -65,7 +76,9 @@ const Index = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            onClick={() => game.status === "available" && setSelectedGame(game.id)}
+            onClick={() => handleGameSelect(game)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <div className="space-y-4">
               <div className="h-40 bg-retro-blue/20 rounded-lg flex items-center justify-center">
