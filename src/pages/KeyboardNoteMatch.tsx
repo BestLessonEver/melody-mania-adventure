@@ -8,9 +8,8 @@ const flatNotes = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A",
 const KeyboardNoteMatch = () => {
   const [score, setScore] = useState(0);
   const [currentNote, setCurrentNote] = useState("");
-  const [draggedNote, setDraggedNote] = useState<string | null>(null);
-  const [showInstructions, setShowInstructions] = useState(true);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(true);
   const [useFlats, setUseFlats] = useState(false);
 
   const notes = useFlats ? flatNotes : sharpNotes;
@@ -24,36 +23,17 @@ const KeyboardNoteMatch = () => {
     const currentNotes = useFlats ? flatNotes : sharpNotes;
     const randomNote = currentNotes[Math.floor(Math.random() * currentNotes.length)];
     setCurrentNote(randomNote);
-    setUseFlats(prev => !prev); // Toggle between flats and sharps for next turn
+    setUseFlats(prev => !prev);
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, note: string) => {
-    e.dataTransfer.setData("text/plain", note);
-    setDraggedNote(note);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, key: string) => {
-    e.preventDefault();
-    setHoveredKey(key);
-  };
-
-  const handleDragLeave = () => {
-    setHoveredKey(null);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, key: string) => {
-    e.preventDefault();
-    const droppedNote = e.dataTransfer.getData("text/plain");
-    setHoveredKey(null);
-    
-    if (droppedNote === key) {
+  const handleKeyPress = (key: string) => {
+    if (key === currentNote) {
       setScore((prev) => prev + 1);
       toast.success("🎵 Correct! Great job! 🌟");
       generateNewNote();
     } else {
       toast.error("❌ Try again! 🎹");
     }
-    setDraggedNote(null);
   };
 
   const closeInstructions = () => {
@@ -78,8 +58,7 @@ const KeyboardNoteMatch = () => {
             <h2 className="text-2xl text-retro-green mb-4">How to Play: Keyboard Note Match</h2>
             <div className="text-left space-y-4 mb-6">
               <p>🎵 A random musical note will appear on the screen.</p>
-              <p>🖱️ Drag the corresponding note from the top row.</p>
-              <p>🎹 Drop it onto the correct piano key below.</p>
+              <p>🎹 Click or tap the correct piano key that matches the note.</p>
               <p>✨ Earn points for each correct match!</p>
             </div>
             <button 
@@ -112,21 +91,6 @@ const KeyboardNoteMatch = () => {
           </div>
         </div>
 
-        <div className="flex justify-center flex-wrap gap-2 px-4">
-          {notes.map((note) => (
-            <motion.div
-              key={note}
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, note)}
-              className="pixel-border bg-retro-blue p-3 cursor-grab active:cursor-grabbing min-w-[48px] text-center"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {note}
-            </motion.div>
-          ))}
-        </div>
-
         <div className="flex justify-center gap-1">
           {pianoKeys.map((key) => {
             const isBlackKey = key.includes("#") || key.includes("♭");
@@ -144,9 +108,9 @@ const KeyboardNoteMatch = () => {
                       : "bg-black/50"
                     : ""
                 }`}
-                onDragOver={(e) => handleDragOver(e, key)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, key)}
+                onClick={() => handleKeyPress(key)}
+                onMouseEnter={() => setHoveredKey(key)}
+                onMouseLeave={() => setHoveredKey(null)}
                 whileHover={{ y: -5 }}
               >
                 <span className={isBlackKey ? "text-white" : "text-black"}>
