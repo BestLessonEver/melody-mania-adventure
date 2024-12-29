@@ -24,7 +24,6 @@ const KeyboardNoteMatch = () => {
     const currentNotes = useFlats ? flatNotes : sharpNotes;
     const randomNote = currentNotes[Math.floor(Math.random() * currentNotes.length)];
     setCurrentNote(randomNote);
-    setUseFlats(prev => !prev);
     setIsCorrect(null);
   };
 
@@ -34,6 +33,7 @@ const KeyboardNoteMatch = () => {
       setScore((prev) => prev + 1);
       toast.success("🎵 Correct! Great job! 🌟");
       setTimeout(() => {
+        setUseFlats(prev => !prev);
         generateNewNote();
       }, 1000);
     } else {
