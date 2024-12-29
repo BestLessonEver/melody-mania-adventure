@@ -37,12 +37,18 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "25%": { transform: "translateX(-5px)" },
+          "75%": { transform: "translateX(5px)" },
+        },
       },
       animation: {
         "pixel-in": "pixel-in 0.3s ease-out",
         "pixel-out": "pixel-out 0.3s ease-out",
         float: "float 3s ease-in-out infinite",
         blink: "blink 1s step-start infinite",
+        shake: "shake 0.5s ease-in-out",
       },
       fontFamily: {
         pixel: ["'Press Start 2P'", "cursive"],

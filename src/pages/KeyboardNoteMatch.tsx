@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 const sharpNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -11,6 +11,7 @@ const KeyboardNoteMatch = () => {
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
   const [useFlats, setUseFlats] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   const notes = useFlats ? flatNotes : sharpNotes;
   const pianoKeys = useFlats ? flatNotes : sharpNotes;
@@ -24,15 +25,23 @@ const KeyboardNoteMatch = () => {
     const randomNote = currentNotes[Math.floor(Math.random() * currentNotes.length)];
     setCurrentNote(randomNote);
     setUseFlats(prev => !prev);
+    setIsCorrect(null);
   };
 
   const handleKeyPress = (key: string) => {
     if (key === currentNote) {
+      setIsCorrect(true);
       setScore((prev) => prev + 1);
       toast.success("🎵 Correct! Great job! 🌟");
-      generateNewNote();
+      setTimeout(() => {
+        generateNewNote();
+      }, 1000);
     } else {
+      setIsCorrect(false);
       toast.error("❌ Try again! 🎹");
+      setTimeout(() => {
+        setIsCorrect(null);
+      }, 1000);
     }
   };
 
@@ -82,11 +91,62 @@ const KeyboardNoteMatch = () => {
           <div className="bg-retro-purple/50 p-6 rounded-lg pixel-border">
             <p className="text-2xl">Match this note:</p>
             <motion.div
-              className="text-6xl text-retro-green mt-4"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
+              className={`text-6xl mt-4 ${
+                isCorrect === true
+                  ? "text-retro-green animate-[pulse_0.5s_ease-in-out_3]"
+                  : isCorrect === false
+                  ? "text-retro-red animate-[shake_0.5s_ease-in-out]"
+                  : "text-retro-green"
+              }`}
+              animate={
+                isCorrect === true
+                  ? {
+                      scale: [1, 1.2, 1],
+                      transition: {
+                        duration: 0.3,
+                        repeat: 2,
+                      },
+                    }
+                  : isCorrect === false
+                  ? {
+                      x: [-10, 10, -10, 10, 0],
+                      transition: {
+                        duration: 0.5,
+                      },
+                    }
+                  : {}
+              }
             >
               {currentNote}
+              {isCorrect === true && (
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {[...Array(20)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-2 h-2 bg-retro-yellow rounded-full"
+                      initial={{
+                        x: "50%",
+                        y: "50%",
+                      }}
+                      animate={{
+                        x: `${Math.random() * 200 - 100}%`,
+                        y: `${Math.random() * 200 - 100}%`,
+                        opacity: [1, 0],
+                        scale: [0, 1],
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: Math.random() * 0.2,
+                      }}
+                    />
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
           </div>
         </div>
