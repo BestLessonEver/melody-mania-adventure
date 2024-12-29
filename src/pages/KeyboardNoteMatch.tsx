@@ -16,7 +16,8 @@ const KeyboardNoteMatch = () => {
   const [useFlats, setUseFlats] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  const notes = useFlats ? flatNotes : sharpNotes;
+  // Use the same notation array as the current note
+  const notes = currentNote.includes("♭") ? flatNotes : sharpNotes;
 
   useEffect(() => {
     generateNewNote();
