@@ -72,8 +72,8 @@ const PianoKeyboard = ({ notes, onKeyPress }: PianoKeyboardProps) => {
       </div>
 
       {/* Black keys layer */}
-      <div className="absolute flex gap-[1.75rem] left-[1.75rem]">
-        {blackKeys.map((key) => (
+      <div className="absolute flex left-10 top-0">
+        {blackKeys.map((key, index) => (
           <motion.div
             key={key}
             className={`pixel-border relative bg-retro-purple h-32 w-12 z-10
@@ -85,6 +85,7 @@ const PianoKeyboard = ({ notes, onKeyPress }: PianoKeyboardProps) => {
             onMouseLeave={() => setHoveredKey(null)}
             whileHover={{ y: -5 }}
             style={{
+              marginLeft: index === 0 ? '0' : '1.75rem',
               boxShadow: "0 0 0 2px white",
             }}
           >
