@@ -25,7 +25,7 @@ export default {
           "100%": { transform: "scale(1)", opacity: "1" },
         },
         "pixel-out": {
-          "0%": { transform: "scale(1)", opacity: "1" },
+          "0%": { transform: "scale(1)", opacity: "0" },
           "20%": { transform: "scale(1.1)", opacity: "0.8" },
           "100%": { transform: "scale(0)", opacity: "0" },
         },
@@ -42,6 +42,10 @@ export default {
           "25%": { transform: "translateX(-5px)" },
           "75%": { transform: "translateX(5px)" },
         },
+        glow: {
+          "0%, 100%": { boxShadow: "0 0 0 rgba(255, 75, 75, 0)" },
+          "50%": { boxShadow: "0 0 20px rgba(255, 75, 75, 0.8)" },
+        },
       },
       animation: {
         "pixel-in": "pixel-in 0.3s ease-out",
@@ -49,6 +53,7 @@ export default {
         float: "float 3s ease-in-out infinite",
         blink: "blink 1s step-start infinite",
         shake: "shake 0.5s ease-in-out",
+        glow: "glow 0.5s ease-in-out",
       },
       fontFamily: {
         pixel: ["'Press Start 2P'", "cursive"],
