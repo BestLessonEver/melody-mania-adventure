@@ -24,37 +24,42 @@ export const PianoKey = ({
   onLeave,
   style,
 }: PianoKeyProps) => {
-  const baseClasses = `pixel-border relative ${
+  const baseClasses = `relative ${
     isBlack
       ? "bg-retro-purple h-32 w-12 z-10"
       : "bg-white h-40 w-16"
-  } flex items-end justify-center pb-4 cursor-pointer transition-colors duration-200`;
+  } flex items-end justify-center pb-4 cursor-pointer transition-all duration-200`;
 
   const hoverClasses = isHovered
     ? isBlack
-      ? "bg-white/50"
-      : "bg-black/50"
+      ? "bg-gray-700"
+      : "bg-gray-100"
     : "";
 
-  const errorClasses =
-    isPressed && isCorrect === false ? "animate-[glow_0.5s_ease-in-out] bg-retro-red" : "";
+  const pressedClasses = isPressed
+    ? isCorrect === true
+      ? "animate-[glow_0.5s_ease-in-out] bg-retro-green"
+      : isCorrect === false
+      ? "animate-[glow_0.5s_ease-in-out] bg-retro-red"
+      : ""
+    : "";
 
   return (
     <motion.div
-      className={`${baseClasses} ${hoverClasses} ${errorClasses}`}
+      className={`${baseClasses} ${hoverClasses} ${pressedClasses} pixel-border`}
       onClick={onClick}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      whileHover={{ y: -5 }}
-      style={{
-        ...style,
-        boxShadow: isBlack ? "0 0 0 2px white" : undefined,
-      }}
+      whileHover={{ y: 2 }}
+      whileTap={{ y: 4 }}
+      style={style}
     >
       {isPressed && isCorrect !== null && (
         <KeyAnimation isCorrect={isCorrect} />
       )}
-      <span className={isBlack ? "text-white" : "text-black"}>{note}</span>
+      <span className={`${isBlack ? "text-white" : "text-black"} text-sm`}>
+        {note}
+      </span>
     </motion.div>
   );
 };
